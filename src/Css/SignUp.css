@@ -1,0 +1,20 @@
+.signup-text {
+  color: #36a0ff;
+  font-weight: bold;
+  font-size: 25px;
+  margin: 30px;
+}
+.signup-paper {
+  margin: 30px;
+}
+.signup-button {
+  margin-top: 30px;
+}
+.signup-header {
+  margin: 30px;
+}
+.signup-title {
+  color: gray;
+  font-size: 15px;
+  margin-left: 20px;
+}

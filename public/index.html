@@ -3,7 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+    원래 viewport는 아래와 같음.
+    <meta name="viewport" content="width=device-width, initial-scale=1"/> 
+    user-scalable=0 추가됨//아이폰 자동 줌인 때문에
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1 minimum-scale=1" /> 
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
