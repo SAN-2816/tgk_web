@@ -3,21 +3,25 @@
 }
 
 .fade-enter {
-  opacity: 0.01;
+  opacity: 0;
+  transform: translateX(100px);
 }
 
 .fade-enter.fade-enter-active {
   opacity: 1;
-  transition: opacity 300ms ease-in;
+  transform: translateX(0px);
+  transition: all 0.4s ease-in-out;
 }
 
 .fade-exit {
   opacity: 1;
+  transform: translateX(0px);
 }
 
 .fade-exit.fade-exit-active {
   opacity: 0.01;
-  transition: opacity 300ms ease-in;
+  transform: translateX(-100px);
+  transition: all 0.4s ease-in-out;
 }
 
 div.transition-group {

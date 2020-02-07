@@ -1,17 +1,22 @@
 import React, { Component } from "react";
 
-import { Link, Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 import {
   Container,
   CssBaseline,
   TextField,
   Button,
-  Grid
+  Grid,
+  RadioGroup,
+  Radio,
+  FormLabel,
+  FormControlLabel
 } from "@material-ui/core";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
 import User from "../Axios/userModel";
+import { randomKorean } from "../Etc/randomKorean";
 import "../Css/SignUp.css";
 
 class SignUp extends Component {
@@ -23,9 +28,9 @@ class SignUp extends Component {
       nickname: "",
       company: "",
       confirm: "",
+      sex: 0,
       isLoading: false
     };
-    this.postUser.bind();
   }
 
   handleClick = e => {
@@ -36,12 +41,12 @@ class SignUp extends Component {
     if (password === confirm) {
       this.postUser();
     } else {
-      console.log("xxx");
       this.setState({
         isLoading: false
       });
     }
   };
+
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value //target의 name을 가져옴.
@@ -50,26 +55,19 @@ class SignUp extends Component {
 
   createNickname = e => {
     const minNum = 2;
-    const maxNum = 10;
-    const rand = minNum + Math.random() * (maxNum - minNum);
+    const maxNum = 6;
+    const rand = Math.round(minNum + Math.random() * (maxNum - minNum));
     this.setState({
-      nickname: rand
+      nickname: randomKorean(rand)
     });
-  };
-  compareToFirstPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    if (value && value !== form.getFieldValue("password")) {
-      callback("위 비밀번호와 다릅니다.");
-    } else {
-      callback();
-    }
   };
   postUser = async () => {
     const data = await User(
       this.state.email,
       this.state.password,
       this.state.nickname,
-      this.state.company
+      this.state.company,
+      this.state.sex
     );
     console.log(data);
     if (data.complete) {
@@ -105,7 +103,7 @@ class SignUp extends Component {
               <Grid item xs={12} sm={6}>
                 <TextField
                   name="nickname"
-                  variant="outlined"
+                  variant="filled"
                   required
                   fullWidth
                   id="nickname"
@@ -166,17 +164,41 @@ class SignUp extends Component {
                   onChange={this.handleChange}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <Grid
+                  container
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="center"
+                >
+                  <FormLabel style={{ marginRight: "20px" }}>성별</FormLabel>
+                  <RadioGroup name="sex" onChange={this.handleChange} row>
+                    <FormControlLabel
+                      value="0"
+                      control={<Radio color="primary" />}
+                      label="남성"
+                    />
+                    <FormControlLabel
+                      value="1"
+                      control={<Radio />}
+                      label="여성"
+                    />
+                  </RadioGroup>
+                </Grid>
+              </Grid>
             </Grid>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className="signup-button"
-              disabled={isLoading}
-              onClick={this.handleClick}
-            >
-              회원가입
-            </Button>
+            <div className="form-button">
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                className="signup-button"
+                disabled={isLoading}
+                onClick={this.handleClick}
+              >
+                회원가입
+              </Button>
+            </div>
           </form>
         </div>
       </Container>

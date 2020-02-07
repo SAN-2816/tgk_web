@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { withCookies, Cookies } from "react-cookie";
 import { instanceOf } from "prop-types";
 import { Link, Redirect } from "react-router-dom";
-
 import {
   Container,
   CssBaseline,
@@ -10,11 +9,10 @@ import {
   FormControlLabel,
   Button,
   Checkbox,
-  Grid
+  ButtonGroup
 } from "@material-ui/core";
-
 import { postLogin, postAutoLogin } from "../Axios/loginModel";
-
+import logo from "../Images/logo512.png";
 import "../Css/Login.css";
 
 class Login extends Component {
@@ -94,7 +92,7 @@ class Login extends Component {
         <Container className="login-container">
           <CssBaseline />
           <div className="logo-form">
-            <img className="logo" src="./logo512.png" alt="" />
+            <img className="logo" src={logo} alt="" style={{ width: "50%" }} />
           </div>
           <form className="login-form" noValidate>
             <TextField
@@ -106,7 +104,6 @@ class Login extends Component {
               label="이메일"
               name="email"
               autoComplete="email"
-              autoFocus
               onChange={this.handleChange}
             />
             <TextField
@@ -136,26 +133,21 @@ class Login extends Component {
               fullWidth
               variant="contained"
               color="primary"
-              className="login-button"
               onClick={this.handleClick}
               disabled={isLoading}
             >
               로그인
             </Button>
-            <div className="login-bottom">
-              <Grid container justify="space-between" alignItems="center">
-                <Grid item>
-                  <Link to="/signup">회원가입</Link>
-                </Grid>
-                <Grid item>
-                  <Link to="/">아이디찾기</Link>
-                </Grid>
-                <Grid item>
-                  <Link to="/">비밀번호찾기</Link>
-                </Grid>
-              </Grid>
-            </div>
           </form>
+          <div style={{ textAlign: "center", marginTop: 20 }}>
+            <ButtonGroup variant="text" aria-label="text primary button group">
+              <Button component={Link} to="/signup">
+                회원가입
+              </Button>
+              <Button>아이디찾기</Button>
+              <Button>비밀번호찾기</Button>
+            </ButtonGroup>
+          </div>
         </Container>
       </div>
     );
