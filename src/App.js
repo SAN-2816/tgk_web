@@ -28,17 +28,12 @@ const theme = createMuiTheme({
 function App() {
   return (
     <CookiesProvider>
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <MuiThemeProvider theme={theme}>
           <Routers />
         </MuiThemeProvider>
       </Router>
     </CookiesProvider>
-    // <CookiesProvider>
-    //   <Router>
-    //     <Routers />
-    //   </Router>
-    // </CookiesProvider>
   );
 }
 

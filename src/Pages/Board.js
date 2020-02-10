@@ -18,6 +18,7 @@ class Board extends Component {
   }
   getMeetView = async () => {
     const data = await findMeetBoard(this.state._id);
+    console.log(data);
     if (data.complete) {
       this.setState({
         board: data.message,

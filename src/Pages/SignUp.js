@@ -23,18 +23,19 @@ class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      informText: "정보를 입력해주세요.",
       email: "",
       password: "",
       nickname: "",
       company: "",
       confirm: "",
-      sex: 0,
+      sex: 3,
       isLoading: false
     };
   }
 
   handleClick = e => {
-    const { password, confirm } = this.state;
+    const { password, confirm, sex } = this.state;
     this.setState({
       isLoading: true
     });
@@ -42,6 +43,7 @@ class SignUp extends Component {
       this.postUser();
     } else {
       this.setState({
+        informText: "비밀번호가 다릅니다.",
         isLoading: false
       });
     }
@@ -77,7 +79,7 @@ class SignUp extends Component {
     }
   };
   render() {
-    const { isLoading, isSignUp } = this.state;
+    const { informText, isLoading, isSignUp } = this.state;
     if (isSignUp) {
       return <Redirect to="/" />;
     }
@@ -95,7 +97,7 @@ class SignUp extends Component {
             </Grid>
           </Grid>
         </div>
-        <div className="signup-text">정보를 입력해주세요.</div>
+        <div className="signup-text">{informText}</div>
         <CssBaseline />
         <div className="signup-paper">
           <form className="signup-form" noValidate>
