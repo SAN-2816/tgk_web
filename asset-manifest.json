@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/tgk_web/static/css/main.bead03bb.chunk.css",
-    "main.js": "/tgk_web/static/js/main.f9460dcf.chunk.js",
-    "main.js.map": "/tgk_web/static/js/main.f9460dcf.chunk.js.map",
+    "main.js": "/tgk_web/static/js/main.eb4531fc.chunk.js",
+    "main.js.map": "/tgk_web/static/js/main.eb4531fc.chunk.js.map",
     "runtime-main.js": "/tgk_web/static/js/runtime-main.0689825e.js",
     "runtime-main.js.map": "/tgk_web/static/js/runtime-main.0689825e.js.map",
     "static/js/2.4188c165.chunk.js": "/tgk_web/static/js/2.4188c165.chunk.js",
     "static/js/2.4188c165.chunk.js.map": "/tgk_web/static/js/2.4188c165.chunk.js.map",
     "index.html": "/tgk_web/index.html",
-    "precache-manifest.c9819793c36c7f70062bfdf8021ab0d2.js": "/tgk_web/precache-manifest.c9819793c36c7f70062bfdf8021ab0d2.js",
+    "precache-manifest.dec4451b0fe2bebda41dfd92a7b07f62.js": "/tgk_web/precache-manifest.dec4451b0fe2bebda41dfd92a7b07f62.js",
     "service-worker.js": "/tgk_web/service-worker.js",
     "static/css/main.bead03bb.chunk.css.map": "/tgk_web/static/css/main.bead03bb.chunk.css.map",
     "static/js/2.4188c165.chunk.js.LICENSE": "/tgk_web/static/js/2.4188c165.chunk.js.LICENSE",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.0689825e.js",
     "static/js/2.4188c165.chunk.js",
     "static/css/main.bead03bb.chunk.css",
-    "static/js/main.f9460dcf.chunk.js"
+    "static/js/main.eb4531fc.chunk.js"
   ]
 }
