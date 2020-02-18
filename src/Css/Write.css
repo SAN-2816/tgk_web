@@ -1,0 +1,12 @@
+.ageInput {
+  margin-right: 10px;
+  width: 150px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  font-size: large;
+  text-align: center;
+}
+.ageInput:focus {
+  outline: none;
+}

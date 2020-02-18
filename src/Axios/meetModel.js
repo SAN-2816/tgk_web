@@ -60,3 +60,21 @@ export const findMeetBoard = async _id => {
     console.log(error);
   }
 };
+export const pushComment = async (_id, uid, comment) => {
+  try {
+    const response = await axios.post(
+      process.env.REACT_APP_TGK_SERVER + `/api/board/pushComment`,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        _id: _id,
+        uid: uid,
+        comment: comment
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

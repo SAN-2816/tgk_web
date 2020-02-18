@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Typography,
-  Grid,
-  Button,
-  FormControl,
-  Input
-} from "@material-ui/core";
+import { Typography, Grid, Button, FormControl } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
@@ -17,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: "bold"
   },
   button: {
-    width: "90px",
+    width: "100px",
     marginTop: "20px",
     fontSize: "25px",
     borderRadius: "20px",
@@ -322,12 +316,19 @@ export function AgeTag({ callbackFromParent }) {
   const classes = useStyles();
   let age = 0;
   const inputChange = e => {
-    age = e.target.value;
+    age = Math.round(e.target.value); //.replace(/[^0-9]/g, "")
   };
   return (
     <div style={{ maxHeight: "50px" }}>
-      <Typography className={classes.title} color="primary">
+      <Typography className={classes.title} color="primary" gutterBottom>
         나이를 입력해주세요.
+      </Typography>
+      <Typography
+        variant="caption"
+        color="secondary"
+        style={{ marginLeft: "10px" }}
+      >
+        * 20세 이상부터 사용 가능합니다.
       </Typography>
       <Grid
         container
@@ -337,10 +338,19 @@ export function AgeTag({ callbackFromParent }) {
         style={{ marginTop: "100px" }}
       >
         <FormControl>
-          <Input
+          {/* <Input
             type="number"
             onChange={inputChange}
             style={{ marginRight: "10px" }}
+            inputMode="numeric"
+          /> */}
+          <input
+            className="ageInput"
+            type="number"
+            onChange={inputChange}
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder="20"
           />
         </FormControl>
         <Button

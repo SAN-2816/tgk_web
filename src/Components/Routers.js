@@ -8,6 +8,8 @@ import Main from "../Pages/Main";
 import Board from "../Pages/Board";
 import Write from "../Pages/Write";
 import TagChoice from "../Pages/TagChoice";
+import Agree from "../Pages/Agree";
+import Message from "../Pages/Message";
 
 function Routers({ location }) {
   return (
@@ -25,6 +27,9 @@ function Routers({ location }) {
             <Route path="/board" component={Board} />
             <Route path="/write" component={Write} />
             <Route path="/tagchoice" component={TagChoice} />
+            <Route path="/agree/:index" component={Agree} />
+            <Route path="/message" component={Message} />
+            <Route component={Login} />
           </Switch>
         </section>
       </CSSTransition>

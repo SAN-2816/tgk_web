@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function BoardAppBar({ _id }) {
+function BackAppBar({ name }) {
   const classes = useStyles();
   return (
     <AppBar
@@ -46,15 +46,7 @@ function BoardAppBar({ _id }) {
               <ArrowBackIosIcon color="primary" />
             </IconButton>
           </Link>
-          <Link
-            to={{
-              pathname: "/board",
-              state: { _id: _id }
-            }}
-            style={{ textDecoration: "none" }}
-          >
-            <Typography className={classes.title}>게시글</Typography>
-          </Link>
+          <Typography className={classes.title}>{name}</Typography>
           <IconButton edge="end" disabled>
             <ArrowBackIosIcon style={{ color: "#ffffff" }} />
           </IconButton>
@@ -64,7 +56,7 @@ function BoardAppBar({ _id }) {
   );
 }
 
-export default BoardAppBar;
-BoardAppBar.propTypes = {
+export default BackAppBar;
+BackAppBar.propTypes = {
   post: PropTypes.object
 };

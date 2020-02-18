@@ -10,51 +10,98 @@ import {
   Grid,
   RadioGroup,
   Radio,
+  FormControl,
+  FormGroup,
   FormLabel,
-  FormControlLabel
+  FormControlLabel,
+  Checkbox,
+  Collapse
 } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
 import User from "../Axios/userModel";
 import { randomKorean } from "../Etc/randomKorean";
+import EmailDialog from "../Components/Dialog/EmailDialog";
 import "../Css/SignUp.css";
 
 class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      informText: "정보를 입력해주세요.",
       email: "",
       password: "",
       nickname: "",
       company: "",
       confirm: "",
       sex: 3,
-      isLoading: false
+      isLoading: false,
+      isError: false,
+      isSignUp: false,
+      isEnd: false,
+      textError: "",
+      service: false,
+      personal: false,
+      marketing: false
     };
   }
 
   handleClick = e => {
-    const { password, confirm, sex } = this.state;
+    const {
+      email,
+      password,
+      nickname,
+      company,
+      confirm,
+      sex,
+      service,
+      personal,
+      marketing
+    } = this.state;
     this.setState({
       isLoading: true
     });
-    if (password === confirm) {
-      this.postUser();
-    } else {
+    if (email === "" || password === "" || nickname === "" || company === "") {
       this.setState({
-        informText: "비밀번호가 다릅니다.",
-        isLoading: false
+        isLoading: false,
+        isError: true,
+        textError: "빈 공간이 있습니다."
       });
+    } else if (sex === 3) {
+      this.setState({
+        isLoading: false,
+        isError: true,
+        textError: "성별을 선택해주세요."
+      });
+    } else if (password !== confirm) {
+      this.setState({
+        isLoading: false,
+        isError: true,
+        textError: "비밀번호가 다릅니다."
+      });
+    } else if (!service || !personal) {
+      this.setState({
+        isLoading: false,
+        isError: true,
+        textError: "필수 이용 약관 동의가 필요합니다."
+      });
+    } else {
+      this.postUser();
     }
   };
 
   handleChange = e => {
     this.setState({
+      isError: false,
       [e.target.name]: e.target.value //target의 name을 가져옴.
     });
   };
-
+  checkboxChange = e => {
+    this.setState({
+      isError: false,
+      [e.target.name]: e.target.checked //target의 name을 가져옴.
+    });
+  };
   createNickname = e => {
     const minNum = 2;
     const maxNum = 6;
@@ -71,20 +118,28 @@ class SignUp extends Component {
       this.state.company,
       this.state.sex
     );
-    console.log(data);
+
     if (data.complete) {
       this.setState({ isSignUp: true });
     } else {
-      this.setState({ isLoading: false });
+      this.setState({
+        isLoading: false,
+        isError: true,
+        textError: "중복된 닉네임 또는 중복된 이메일 입니다."
+      });
     }
   };
+  callbackDialog = () => {
+    this.setState({ isSignUp: false, isEnd: true });
+  };
   render() {
-    const { informText, isLoading, isSignUp } = this.state;
-    if (isSignUp) {
+    const { isLoading, isSignUp, isError, isEnd, textError } = this.state;
+    if (isEnd) {
       return <Redirect to="/" />;
     }
     return (
       <Container component="signup-container" maxWidth="xs">
+        <EmailDialog isOpen={isSignUp} callback={this.callbackDialog} />
         <div className="signup-header">
           <Grid container>
             <Grid>
@@ -97,7 +152,7 @@ class SignUp extends Component {
             </Grid>
           </Grid>
         </div>
-        <div className="signup-text">{informText}</div>
+        <div className="signup-text">정보를 입력해주세요.</div>
         <CssBaseline />
         <div className="signup-paper">
           <form className="signup-form" noValidate>
@@ -189,6 +244,93 @@ class SignUp extends Component {
                 </Grid>
               </Grid>
             </Grid>
+            <FormControl
+              component="fieldset"
+              fullWidth
+              style={{ marginTop: "20px" }}
+            >
+              <FormGroup row>
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={this.state.service}
+                        onChange={this.checkboxChange}
+                        name="service"
+                        value="service"
+                        size="small"
+                      />
+                    }
+                    label="(필수) 서비스 이용 약관 동의"
+                  />
+                  <Link to="/agree/0" style={{ textDecoration: "none" }}>
+                    <Button size="small" color="primary">
+                      click
+                    </Button>
+                  </Link>
+                </Grid>
+              </FormGroup>
+              <FormGroup row>
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={this.state.personal}
+                        onChange={this.checkboxChange}
+                        name="personal"
+                        value="personal"
+                        size="small"
+                      />
+                    }
+                    label="(필수) 개인정보 이용 약관 동의"
+                  />
+                  <Link to="/agree/1" style={{ textDecoration: "none" }}>
+                    <Button size="small" color="primary">
+                      click
+                    </Button>
+                  </Link>
+                </Grid>
+              </FormGroup>
+              <FormGroup row>
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={this.state.marketing}
+                        onChange={this.checkboxChange}
+                        name="marketing"
+                        value="marketing"
+                        size="small"
+                      />
+                    }
+                    label="(선택) 마케팅 정보 수신 동의"
+                  />
+                  <Link to="/agree/2" style={{ textDecoration: "none" }}>
+                    <Button size="small" color="primary">
+                      click
+                    </Button>
+                  </Link>
+                </Grid>
+              </FormGroup>
+            </FormControl>
+            <Collapse in={isError}>
+              <Alert severity="error">{textError}</Alert>
+            </Collapse>
             <div className="form-button">
               <Button
                 fullWidth

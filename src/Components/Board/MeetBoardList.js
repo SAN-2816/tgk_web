@@ -8,7 +8,8 @@ import moment from "moment-timezone";
 const useStyles = makeStyles(theme => ({
   card: {
     maxHeight: "170px",
-    marginBottom: "10px"
+    marginBottom: "10px",
+    boxShadow: "none"
   },
   chip: {
     marginRight: "10px",
@@ -64,7 +65,9 @@ function MeetBoardList({
   if (uid.sex === 1) {
     sexColor = "secondary";
   }
-
+  function clickLink() {
+    localStorage.setItem("board_id", _id);
+  }
   return (
     <div>
       <Link
@@ -73,9 +76,13 @@ function MeetBoardList({
           state: { _id: _id }
         }}
         style={{ textDecoration: "none" }}
+        onClick={clickLink}
       >
         <Card className={classes.card}>
-          <CardContent className={classes.cardContent}>
+          <CardContent
+            className={classes.cardContent}
+            style={{ marginLeft: "10px", marginRight: "10px" }}
+          >
             <Chip
               className={classes.chip}
               size="small"

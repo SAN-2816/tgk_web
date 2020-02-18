@@ -55,10 +55,13 @@ class TagChoice extends Component {
     });
   };
   ageCallback = dataFromChild => {
-    this.setState({
-      age: dataFromChild,
-      pageNum: 4
-    });
+    if (dataFromChild < 20 || dataFromChild > 100) {
+    } else {
+      this.setState({
+        age: dataFromChild,
+        pageNum: 4
+      });
+    }
   };
   tagPage = () => {
     const pageNum = this.state.pageNum;

@@ -1,5 +1,6 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+// import { BrowserRouter as Router } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";
 import Routers from "./Components/Routers";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
@@ -28,11 +29,11 @@ const theme = createMuiTheme({
 function App() {
   return (
     <CookiesProvider>
-      <Router basename={process.env.PUBLIC_URL}>
+      <HashRouter basename="/">
         <MuiThemeProvider theme={theme}>
           <Routers />
         </MuiThemeProvider>
-      </Router>
+      </HashRouter>
     </CookiesProvider>
   );
 }

@@ -13,21 +13,47 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      page: 0,
       meetBoards: [],
       isLoading: true,
-      isRedirect: false
+      isRedirect: false,
+      isScrolling: false
     };
   }
   componentDidMount() {
-    this.getMeetBoard();
+    window.addEventListener("scroll", this.handleScroll);
+    this.getMeetBoard(this.state.page);
   }
-  getMeetBoard = async () => {
-    const data = await getMeetBoard(0);
+  componentWillUnmount() {
+    // 언마운트 될때에, 스크롤링 이벤트 제거
+    window.removeEventListener("scroll", this.handleScroll);
+  }
+  handleScroll = () => {
+    const { innerHeight } = window;
+    const { scrollHeight } = document.body;
+    // IE에서는 document.documentElement 를 사용.
+    const scrollTop =
+      (document.documentElement && document.documentElement.scrollTop) ||
+      document.body.scrollTop;
+    // 스크롤링 했을때, 브라우저의 가장 밑에서 100정도 높이가 남았을때에 실행하기위함.
+
+    if (scrollHeight - innerHeight - scrollTop < 100) {
+      if (!this.state.isScrolling) {
+        this.setState({
+          isScrolling: true,
+          page: this.state.page + 10
+        });
+        this.getMeetBoard(this.state.page);
+      }
+    }
+  };
+  getMeetBoard = async page => {
+    const data = await getMeetBoard(page);
     if (data.complete) {
-      console.log(data);
       this.setState({
-        meetBoards: data.message,
-        isLoading: false
+        meetBoards: this.state.meetBoards.concat(data.message),
+        isLoading: false,
+        isScrolling: false
       });
     }
   };
@@ -36,9 +62,15 @@ class Main extends Component {
     return (
       <div>
         <CssBaseline />
-        <MainAppBar />
+        <MainAppBar props={this.props} />
         {isLoading ? (
-          <div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
             <CircularProgress color="primary" />
           </div>
         ) : (

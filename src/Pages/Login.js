@@ -9,11 +9,26 @@ import {
   FormControlLabel,
   Button,
   Checkbox,
-  ButtonGroup
+  ButtonGroup,
+  Collapse,
+  Box,
+  Typography
 } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import { postLogin, postAutoLogin } from "../Axios/loginModel";
+import Backdrop from "../Components/Backdrop";
 import logo from "../Images/logo512.png";
 import "../Css/Login.css";
+
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {"Copyright © "}
+      4PEEPS 2020
+      {"."}
+    </Typography>
+  );
+}
 
 class Login extends Component {
   static propTypes = {
@@ -28,13 +43,15 @@ class Login extends Component {
       password: "",
       isLogin: false,
       isAutoLogin: cookies.get("autoLogin") || false,
-      isLoading: false
+      isLoading: false,
+      isError: false,
+      textError: ""
     };
   }
   componentDidMount() {
     if (this.state.isAutoLogin === "true") {
       //타입오류때문에 "true"
-      console.log(this.state.isAutoLogin);
+
       const { cookies } = this.props;
       const _id = cookies.get("_id");
       const token = cookies.get("token");
@@ -56,34 +73,65 @@ class Login extends Component {
     this.setState({
       isLoading: true
     });
-    this.postLogin();
+    if (this.state.email === "" || this.state.password === "") {
+      this.setState({
+        isError: true,
+        isLoading: false,
+        textError: "이메일이나 비밀번호를 확인해주세요."
+      });
+    } else {
+      this.postLogin();
+    }
   };
 
   postLogin = async () => {
     const data = await postLogin(this.state.email, this.state.password);
-    console.log(data);
+
     if (data.complete) {
-      const { cookies } = this.props;
-      cookies.set("_id", data.message._id, { path: "/" });
-      cookies.set("token", data.message.token, { path: "/" });
-      cookies.set("autoLogin", this.state.isAutoLogin, { path: "/" });
-      this.setState({ isLogin: true });
+      if (data.message.auth) {
+        //인증 여부 확인해야함.
+        const { cookies } = this.props;
+        cookies.set("_id", data.message._id, { path: "/" });
+        cookies.set("token", data.message.token, { path: "/" });
+        cookies.set("autoLogin", this.state.isAutoLogin, { path: "/" });
+        this.setState({ isLogin: true });
+      } else {
+        //오류메세지 출력
+        this.setState({
+          isError: true,
+          isLoading: false,
+          textError: "이메일 인증을 확인해주세요."
+        });
+      }
     } else {
-      this.setState({ isLoading: false });
+      this.setState({
+        isError: true,
+        isLoading: false,
+        textError: "이메일이나 비밀번호를 확인해주세요."
+      });
     }
   };
   postAutoLogin = async (_id, token) => {
     const data = await postAutoLogin(_id, token);
-    console.log(data);
+
     if (data.complete) {
       this.setState({
         isLogin: true
       });
+    } else {
+      const { cookies } = this.props;
+      cookies.remove("_id");
+      cookies.remove("token");
+      cookies.remove("autoLogin");
+      this.setState({
+        isError: true,
+        isLoading: false,
+        textError: "인증이 올바르지 않습니다. 다시 로그인해주세요."
+      });
     }
   };
-
   render() {
-    const { isLoading, isLogin } = this.state;
+    const { isLoading, isLogin, isError, textError } = this.state;
     if (isLogin) {
       return <Redirect to="/main" />;
     }
@@ -92,7 +140,7 @@ class Login extends Component {
         <Container className="login-container">
           <CssBaseline />
           <div className="logo-form">
-            <img className="logo" src={logo} alt="" style={{ width: "50%" }} />
+            <img className="logo" src={logo} alt="" style={{ width: "55%" }} />
           </div>
           <form className="login-form" noValidate>
             <TextField
@@ -118,6 +166,9 @@ class Login extends Component {
               autoComplete="current-password"
               onChange={this.handleChange}
             />
+            <Collapse in={isError}>
+              <Alert severity="error">{textError}</Alert>
+            </Collapse>
             <FormControlLabel
               control={
                 <Checkbox
@@ -127,6 +178,7 @@ class Login extends Component {
                 />
               }
               label="자동 로그인"
+              style={{ marginTop: "5px" }}
             />
             <Button
               type="submit"
@@ -135,20 +187,32 @@ class Login extends Component {
               color="primary"
               onClick={this.handleClick}
               disabled={isLoading}
+              style={{ marginTop: "10px" }}
             >
               로그인
             </Button>
           </form>
-          <div style={{ textAlign: "center", marginTop: 20 }}>
-            <ButtonGroup variant="text" aria-label="text primary button group">
-              <Button component={Link} to="/signup">
-                회원가입
-              </Button>
-              <Button>아이디찾기</Button>
-              <Button>비밀번호찾기</Button>
-            </ButtonGroup>
-          </div>
+          <ButtonGroup
+            size="small"
+            variant="text"
+            orientation="horizontal"
+            style={{
+              marginTop: "30px",
+              color: "#9e9e9e"
+            }}
+            fullWidth
+          >
+            <Button component={Link} to="/signup" style={{ color: "#9e9e9e" }}>
+              회원가입
+            </Button>
+            <Button style={{ color: "#9e9e9e" }}>비밀번호찾기</Button>
+          </ButtonGroup>
+          <Box mt={8}>
+            <Copyright />
+          </Box>
         </Container>
+
+        <Backdrop isLoading={isLoading} />
       </div>
     );
   }

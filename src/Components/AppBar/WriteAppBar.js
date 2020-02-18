@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
   text: { fontSize: "15px", color: "#36A0FF" }
 }));
 
-function WriteAppBar({ callbackRegist }) {
+function WriteAppBar({ callbackRegist, isLoading }) {
   const classes = useStyles();
   return (
     <AppBar className={classes.bar} position="sticky">
@@ -33,7 +33,11 @@ function WriteAppBar({ callbackRegist }) {
             <Button className={classes.text}>취소</Button>
           </Link>
           <Typography className={classes.title}>글쓰기</Typography>
-          <Button className={classes.text} onClick={() => callbackRegist()}>
+          <Button
+            className={classes.text}
+            onClick={() => callbackRegist()}
+            disabled={isLoading}
+          >
             등록
           </Button>
         </Grid>
